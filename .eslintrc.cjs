@@ -23,7 +23,19 @@ module.exports = {
   // Base config
   extends: ["eslint:recommended", "prettier"],
   rules: {
-    "func-style": ["error", { allowArrowFunctions: false }]
+    "prefer-const": "error",
+    "no-restricted-imports": [
+      "error",
+      {
+        paths: [
+          {
+            // Vercelを使用するため、必ず@vercel/remixからimportするようにする
+            name: "@remix-run/node",
+            message: "Please import from '@vercel/remix' instead."
+          }
+        ]
+      }
+    ]
   },
   overrides: [
     // React
