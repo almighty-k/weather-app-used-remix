@@ -8,7 +8,17 @@ import {
   Scripts,
   ScrollRestoration
 } from "@remix-run/react";
-import type { LinksFunction } from "@vercel/remix";
+import type { LinksFunction, MetaFunction } from "@vercel/remix";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "天気予報検索アプリ" },
+    {
+      name: "description",
+      content: "検索した場所の1週間の天気を確認できるアプリです。"
+    }
+  ];
+};
 
 export const config = { runtime: "edge" };
 
