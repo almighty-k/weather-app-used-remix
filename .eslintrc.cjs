@@ -22,7 +22,9 @@ module.exports = {
 
   // Base config
   extends: ["eslint:recommended", "prettier"],
-
+  rules: {
+    "func-style": ["error", { allowArrowFunctions: false }]
+  },
   overrides: [
     // React
     {
