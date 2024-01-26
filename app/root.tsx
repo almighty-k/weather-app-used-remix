@@ -6,14 +6,14 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration
 } from "@remix-run/react";
 import type { LinksFunction } from "@vercel/remix";
 
 export const config = { runtime: "edge" };
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : [])
 ];
 
 export default function App() {
