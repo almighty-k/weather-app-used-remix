@@ -4,12 +4,11 @@ import { Suspense } from "react";
 import { SerializeFrom, defer } from "@vercel/remix";
 import { Await, useAsyncValue, useLoaderData } from "@remix-run/react";
 
-import type { CurrentResponse } from "~/api.types";
-import { API_ENDPOINT } from "~/config.server";
 import { InfoRow } from "~/components/info-row";
 import { Title } from "~/components/title";
 import { SearchInput } from "~/components/input";
 import { CardLabel } from "~/components/label";
+import { fetchCurrentWeather } from "~/api/api.server";
 
 export default function WeatherForecasts() {
   const { currentWeatherPromise } = useLoaderData<typeof loader>();
@@ -121,15 +120,4 @@ export async function loader() {
   return defer({
     currentWeatherPromise
   });
-}
-
-async function fetchCurrentWeather({
-  location
-}: {
-  location: string;
-}): Promise<CurrentResponse> {
-  const res = await fetch(
-    `${API_ENDPOINT}/current.json?key=${process.env.WHETHER_API_KEY}&q=${location}`
-  );
-  return await res.json();
 }
