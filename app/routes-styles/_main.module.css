@@ -1,0 +1,13 @@
+.wrapper {
+  padding: 1rem 0.5rem;
+}
+
+@media screen and (min-width: 640px) {
+  .wrapper {
+    padding: 2rem 5rem;
+    border: 2px solid var(--color-purple-2);
+    border-radius: 0.5rem;
+    max-width: 500px;
+    margin: auto;
+  }
+}
