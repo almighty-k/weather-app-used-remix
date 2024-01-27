@@ -2,7 +2,7 @@ import classes from "../routes-styles/_main.weather_forecasts.module.css";
 
 import { Suspense } from "react";
 import { SerializeFrom, defer } from "@vercel/remix";
-import { Await, useAsyncValue, useLoaderData } from "@remix-run/react";
+import { Await, useLoaderData } from "@remix-run/react";
 
 import { Title } from "../components/title";
 import { SearchInput } from "../components/input";
@@ -24,7 +24,9 @@ export default function WeatherForecasts() {
         {/* TODO: ローディングスケルトンの実装 */}
         <Suspense fallback={<p>loading...</p>}>
           <Await resolve={currentWeatherPromise}>
-            <CurrentWeatherCard />
+            {(resolvedValue) => (
+              <CurrentWeatherCard currentWeather={resolvedValue} />
+            )}
           </Await>
         </Suspense>
       </div>
@@ -32,13 +34,14 @@ export default function WeatherForecasts() {
   );
 }
 
-function CurrentWeatherCard() {
-  // 2024年1月27日時点でuseAsyncValueの型定義が不完全なため、asの使用を妥協
-  // なお、型定義にあたっていは以下issueを参照
-  // https://github.com/remix-run/remix/issues/7881
-  const { location, current } = useAsyncValue() as Awaited<
+interface CurrentWeatherCardProps {
+  currentWeather: Awaited<
     SerializeFrom<typeof loader>["currentWeatherPromise"]
   >;
+}
+
+function CurrentWeatherCard({ currentWeather }: CurrentWeatherCardProps) {
+  const { location, current } = currentWeather;
 
   return (
     <div className={classes.currentWeatherCard}>
