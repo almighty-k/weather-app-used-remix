@@ -5,7 +5,7 @@ interface Location {
   region: string;
   country: string;
   tz_id?: string;
-  localtime_epoch?: number; // 現在の日付と時刻
+  localtime_epoch?: number;
   localtime?: string; // 現在日時
 }
 
@@ -30,7 +30,7 @@ interface Current {
   pressure_mb: number; // 気圧（ミリバール）
   pressure_in: number; // 気圧（インチ）
   precip_mm: number; // 降水量（ミリメートル）
-  precip_in: number; // 降水量（インチ）
+  precip_in: number; // 降水確率
   humidity: number; // 湿度
   cloud: number; // 雲量
   is_day: number; // 昼間かどうか
