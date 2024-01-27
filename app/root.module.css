@@ -1,0 +1,17 @@
+:root {
+  --color-purple-3: #8b55f6;
+  --color-purple-2: #ece1fd;
+  --color-purple-1: #fbf8ff;
+  --color-gray-3: #7d7a78;
+  --color-gray-2: #d4d4d4;
+  --color-gray-1: #e6e6e6;
+}
+
+.body {
+  background-color: var(--color-purple-1);
+  padding-top: 1rem;
+}
+
+p {
+  margin: 0;
+}

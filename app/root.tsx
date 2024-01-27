@@ -1,3 +1,5 @@
+import classes from "~/root.module.css";
+
 import { cssBundleHref } from "@remix-run/css-bundle";
 
 import {
@@ -35,7 +37,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className={classes.body}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
