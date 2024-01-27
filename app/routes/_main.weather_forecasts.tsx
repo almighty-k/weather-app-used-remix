@@ -40,7 +40,9 @@ interface CurrentWeatherCardProps {
   >;
 }
 
-function CurrentWeatherCard({ currentWeather }: CurrentWeatherCardProps) {
+export function CurrentWeatherCard({
+  currentWeather
+}: CurrentWeatherCardProps) {
   const { location, current } = currentWeather;
 
   return (
@@ -87,7 +89,7 @@ function CurrentWeatherCard({ currentWeather }: CurrentWeatherCardProps) {
           <InfoRow label="Wind Direction" value={current.wind_dir} />
         </li>
         <li>
-          <InfoRow label="Pressure" value={`${current.precip_in} Inches`} />
+          <InfoRow label="Pressure" value={`${current.pressure_in} Inches`} />
         </li>
         <li>
           <InfoRow label="UV Index" value={<UvInfo uv={current.uv} />} />
