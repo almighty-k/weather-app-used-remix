@@ -1,0 +1,32 @@
+.searchInputContainer {
+  padding: 2rem;
+}
+
+.currentWeatherCardContainer {
+  padding: 0.5rem 0;
+}
+
+.currentWeatherCard {
+  background-color: #fff;
+  border: 1px solid var(--color-gray-1);
+  border-radius: 0.5rem;
+}
+
+.currentWeatherLocation {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+}
+
+.currentWeatherInfoListWrapper {
+  margin: 0;
+
+  padding-bottom: 1rem;
+}
+
+@media screen and (min-width: 640px) {
+  .searchInputContainer {
+    padding: 3rem 5rem;
+  }
+}
