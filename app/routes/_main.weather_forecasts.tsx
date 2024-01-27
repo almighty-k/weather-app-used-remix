@@ -1,14 +1,14 @@
-import classes from "~/routes-styles/_main.weather_forecasts.module.css";
+import classes from "../routes-styles/_main.weather_forecasts.module.css";
 
 import { Suspense } from "react";
 import { SerializeFrom, defer } from "@vercel/remix";
 import { Await, useAsyncValue, useLoaderData } from "@remix-run/react";
 
-import { InfoRow } from "~/components/info-row";
-import { Title } from "~/components/title";
-import { SearchInput } from "~/components/input";
-import { CardLabel } from "~/components/label";
-import { fetchCurrentWeather } from "~/api/api.server";
+import { Title } from "../components/title";
+import { SearchInput } from "../components/input";
+import { CardLabel } from "../components/label";
+import { InfoRow } from "../components/info-row";
+import { fetchCurrentWeather } from "../api/api.server";
 
 export default function WeatherForecasts() {
   const { currentWeatherPromise } = useLoaderData<typeof loader>();

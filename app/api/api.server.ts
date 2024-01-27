@@ -1,4 +1,4 @@
-import { API_ENDPOINT } from "~/config.server";
+import { API_ENDPOINT } from "../config.server";
 import type { CurrentResponse } from "./api.types";
 
 export async function fetchCurrentWeather({

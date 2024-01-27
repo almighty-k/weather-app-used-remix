@@ -1,4 +1,4 @@
-import classes from "~/routes-styles/_main.module.css";
+import classes from "../routes-styles/_main.module.css";
 
 import { Outlet } from "@remix-run/react";
 
