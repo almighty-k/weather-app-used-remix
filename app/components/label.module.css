@@ -1,0 +1,8 @@
+.label {
+  display: inline-block;
+  font-weight: bold;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-gray-2);
+  background-color: var(--color-gray-1);
+}
