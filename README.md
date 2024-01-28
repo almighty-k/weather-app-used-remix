@@ -9,7 +9,7 @@
 ### ローカル環境での動作
 
 - 今回は天気情報取得するに当たり、[weatherapi](https://www.weatherapi.com/docs/)を使用しています。
-- そのため、weatherapiに無料登録の上、ルートに`.env`フ˚ァイルを作成して、API KEYを設定する必要があります（`.env.example`を参考）。
+- そのため、weatherapiに無料登録の上、ルートに`.env`ファイルを作成して、API KEYを設定する必要があります（`.env.example`を参考）。
 - 上記手順を踏んだうえで、以下を実行します。
 
   ```bash
@@ -23,6 +23,8 @@
   ```bash
   $ npm run test
   ```
+- (参考:テスト結果)
+  ![テスト結果](test-result.png)
 
 ## 使用技術
 
@@ -32,7 +34,7 @@
 - テスト: [Vitest](https://vitest.dev/), [Testing Library](https://testing-library.com/)
   - Testing Library自体の使用は多少ありますが、Remix内での使用は初めてとなります。
   - また、Vitestについても初めてですが、[Jest](https://jestjs.io/ja/)の使用については経験がございます。
-  - なお、今回を外部APIを使用することから、当初は[RemixのcreateRemixStub](https://remix.run/docs/en/main/utils/create-remix-stub)でレスポンスをMock化し、ページ単位で統合テスト記載する方針を考えていました。
+  - なお、今回外部APIを使用することから、当初は[RemixのcreateRemixStub](https://remix.run/docs/en/main/utils/create-remix-stub)でレスポンスをMock化し、ページ単位で統合テスト記載する方針を考えていました。
   - しかし、調査等時間がかかったため、ページ内の主要コンポーネントに対し、統合テストを記載することで、代用しています。
 
 ### 個別に追加したライブラリ等
@@ -42,6 +44,6 @@
 
 ## LLMの使用と有効性に関して
 
-- 今回、外部APIを使用しましたが、レスポンスの型定義、テスト用のMock値に関して、Chat GPT(GPT-4)やGithub Copilotを使用しています。
+- 今回、外部APIを使用しましたが、レスポンスの型定義、テスト用のMock値に関して、Chat GPT(GPT-4)やGitHub Copilotを使用しています。
   - 例えば、wetherapiのドキュメントを一部読み込ませて、型定義を作成するなどしています。
 - 多少、間違えることはありましたが、概ね問題なく定義されており、今回のような外部APIをもとに型定義する必要がある場合は大いに活用できるという所感です。
