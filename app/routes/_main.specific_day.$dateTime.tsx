@@ -29,12 +29,17 @@ export default function SpecificDay() {
   const { weatherByDatePromise } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
 
+  const location = searchParams.get("location") || "";
+  // 30文字以上の場合はバリデーションエラーを表示
+  const validationError =
+    location.length > 30 ? "Please enter within 30 characters." : "";
+
   const formattedDay = getMonthAndDate(dateTime);
   return (
     <div>
       <div className={classes.titleContainer}>
         <NavLink
-          to={`/weather_forecasts?location=${searchParams.get("location") || ""}`}
+          to={`/weather_forecasts?location=${location}`}
           prefetch="intent"
           className={classes.backIcon}
         >
@@ -45,7 +50,11 @@ export default function SpecificDay() {
       </div>
 
       <div className={classes.searchInputContainer}>
-        <SearchInput label="Location Input" name="location" />
+        <SearchInput
+          label="Location Input"
+          name="location"
+          error={validationError}
+        />
       </div>
 
       <div className={classes.weatherByDateCardContainer}>
@@ -104,7 +113,7 @@ export function WeatherByDateCard({
         <>
           {/* 24時間分表示するため、より重要と思われる「時間」「気温」「降水確率」のみを表示 */}
           {forecastPerHour.map((forecast, index) => (
-            <div key={forecast.time}>
+            <div key={forecast.time + index}>
               <div className={classes.currentWeatherLocation}>
                 <div>
                   <img
@@ -163,6 +172,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const location = new URL(request.url).searchParams.get("location");
   if (!location) return defer({ weatherByDatePromise: null });
+  if (location.length > 30)
+    return defer({
+      weatherByDatePromise: {
+        error: {
+          code: 1006,
+          message: `${ERROR_MESSAGES.validationError}: location" length must be less than 30.`
+        }
+      }
+    });
 
   const [date] = dateTime.split(" ");
   const weatherByDatePromise = fetchWeatherByDate({
