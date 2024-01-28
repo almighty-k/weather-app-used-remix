@@ -2,7 +2,12 @@ import classes from "../routes-styles/_main.weather_forecasts.module.css";
 
 import { Suspense, useReducer } from "react";
 import { LoaderFunctionArgs, SerializeFrom, defer } from "@vercel/remix";
-import { Await, useLoaderData } from "@remix-run/react";
+import {
+  Await,
+  NavLink,
+  useLoaderData,
+  useSearchParams
+} from "@remix-run/react";
 
 import { Title } from "../components/title";
 import { SearchInput } from "../components/input";
@@ -60,6 +65,8 @@ interface CurrentWeatherCardProps {
 export function CurrentWeatherCard({
   currentWeather
 }: CurrentWeatherCardProps) {
+  const [searchParams] = useSearchParams();
+
   if (!currentWeather)
     return (
       <NonCurrentWeatherCardContents message="Enter location for search." />
@@ -74,58 +81,63 @@ export function CurrentWeatherCard({
   const { location, current } = currentWeather;
 
   return (
-    <div className={classes.currentWeatherCard}>
-      <CardLabel label="Current Weather" />
+    <NavLink
+      to={`/specific_day/${location.localtime}?location=${searchParams.get("location")}`}
+      prefetch="intent"
+    >
+      <div className={classes.currentWeatherCardLink}>
+        <CardLabel label="Current Weather" />
 
-      <div className={classes.currentWeatherLocation}>
-        <div>
-          <img src={current.condition.icon} alt="current weather icon" />
+        <div className={classes.currentWeatherLocation}>
+          <div>
+            <img src={current.condition.icon} alt="current weather icon" />
+          </div>
+          <div>
+            <p>
+              {location.localtime && (
+                <InfoRow label="Now" value={location.localtime} />
+              )}
+            </p>
+            <p>
+              <InfoRow label="Location" value={location.name} />
+            </p>
+          </div>
         </div>
-        <div>
-          <p>
-            {location.localtime && (
-              <InfoRow label="Now" value={location.localtime} />
-            )}
-          </p>
-          <p>
-            <InfoRow label="Location" value={location.name} />
-          </p>
-        </div>
+
+        <ul className={classes.currentWeatherInfoListWrapper}>
+          <li>
+            <InfoRow label="Temperature" value={`${current.temp_c}°C`} />
+          </li>
+          <li>
+            <InfoRow label="Humidity" value={`${current.humidity}%`} />
+          </li>
+          <li>
+            <InfoRow label="Feels Like" value={`${current.feelslike_c}°C`} />
+          </li>
+          <li>
+            <InfoRow
+              label="Chance of Precipitation"
+              value={`${current.precip_in}%`}
+            />
+          </li>
+          <li>
+            <InfoRow label="Precipitation" value={`${current.precip_mm}mm`} />
+          </li>
+          <li>
+            <InfoRow label="Wind Speed" value={`${current.wind_kph}km/h`} />
+          </li>
+          <li>
+            <InfoRow label="Wind Direction" value={current.wind_dir} />
+          </li>
+          <li>
+            <InfoRow label="Pressure" value={`${current.pressure_in} Inches`} />
+          </li>
+          <li>
+            <InfoRow label="UV Index" value={<UvInfo uv={current.uv} />} />
+          </li>
+        </ul>
       </div>
-
-      <ul className={classes.currentWeatherInfoListWrapper}>
-        <li>
-          <InfoRow label="Temperature" value={`${current.temp_c}°C`} />
-        </li>
-        <li>
-          <InfoRow label="Humidity" value={`${current.humidity}%`} />
-        </li>
-        <li>
-          <InfoRow label="Feels Like" value={`${current.feelslike_c}°C`} />
-        </li>
-        <li>
-          <InfoRow
-            label="Chance of Precipitation"
-            value={`${current.precip_in}%`}
-          />
-        </li>
-        <li>
-          <InfoRow label="Precipitation" value={`${current.precip_mm}mm`} />
-        </li>
-        <li>
-          <InfoRow label="Wind Speed" value={`${current.wind_kph}km/h`} />
-        </li>
-        <li>
-          <InfoRow label="Wind Direction" value={current.wind_dir} />
-        </li>
-        <li>
-          <InfoRow label="Pressure" value={`${current.pressure_in} Inches`} />
-        </li>
-        <li>
-          <InfoRow label="UV Index" value={<UvInfo uv={current.uv} />} />
-        </li>
-      </ul>
-    </div>
+    </NavLink>
   );
 }
 
@@ -170,6 +182,7 @@ interface ForecastWeatherTableProps {
 export function ForecastWeatherTable({
   forecastWeather
 }: ForecastWeatherTableProps) {
+  const [searchParams] = useSearchParams();
   const [step, dispatchStep] = useReducer(stepReducer, "first");
 
   if (!forecastWeather) {
@@ -219,10 +232,15 @@ export function ForecastWeatherTable({
           <tr>
             {filteredForecast.map((forecastday) => (
               <td key={forecastday.date}>
-                <img
-                  src={forecastday.day.condition.icon}
-                  alt={`${forecastday.date} weather`}
-                />
+                <NavLink
+                  to={`/specific_day/${forecastday.date}?location=${searchParams.get("location")}`}
+                  prefetch="intent"
+                >
+                  <img
+                    src={forecastday.day.condition.icon}
+                    alt={`${forecastday.date} weather`}
+                  />
+                </NavLink>
               </td>
             ))}
           </tr>

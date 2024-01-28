@@ -13,6 +13,17 @@
   border-radius: 0.5rem;
 }
 
+.currentWeatherCardLink {
+  min-height: 21.5rem;
+  background-color: #fff;
+  border: 1px solid var(--color-gray-1);
+  border-radius: 0.5rem;
+}
+
+.currentWeatherCardLink:hover {
+  opacity: 0.7;
+}
+
 .currentWeatherLocation {
   display: flex;
   gap: 1rem;
@@ -59,6 +70,10 @@
 
 .forecastWeatherTable td:last-child {
   border-right: none;
+}
+
+.forecastWeatherTable img:hover {
+  opacity: 0.7;
 }
 
 @media screen and (min-width: 640px) {
