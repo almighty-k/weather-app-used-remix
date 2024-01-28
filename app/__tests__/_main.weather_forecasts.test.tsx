@@ -2,9 +2,13 @@
 import "@testing-library/jest-dom/vitest";
 import { expect, test } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 
-import { CurrentWeatherCard } from "../routes/_main.weather_forecasts";
-import { mockCurrentWeather } from "./mock";
+import {
+  CurrentWeatherCard,
+  ForecastWeatherTable
+} from "../routes/_main.weather_forecasts";
+import { mockCurrentWeather, mockForecastWeather } from "./mock";
 
 test("現在天気の取得値表示が適切である", async () => {
   render(<CurrentWeatherCard currentWeather={mockCurrentWeather} />);
@@ -41,4 +45,103 @@ test("現在天気の取得値表示が適切である", async () => {
 
   expect(screen.getByText("UV Index:")).toBeInTheDocument();
   expect(screen.getByText("Moderate")).toBeInTheDocument();
+});
+
+test("予報天気の取得値表示が適切で、stepボタン選択の際の表示切り替えが適切である", async () => {
+  const user = userEvent.setup();
+
+  const prevButtonName = "Before 3 days";
+  const nextButtonName = "Next 3 days";
+  const days = [
+    "21/01",
+    "22/01",
+    "23/01",
+    "24/01",
+    "25/01",
+    "26/01",
+    "27/01",
+    "28/01",
+    "29/01"
+  ];
+  render(<ForecastWeatherTable forecastWeather={mockForecastWeather} />);
+
+  expect(screen.getByRole("button", { name: prevButtonName })).toBeDisabled();
+  expect(screen.getByRole("button", { name: nextButtonName })).toBeEnabled();
+
+  // それぞれのstepの代表的な1つの日付(各stepの最初の日付)のみを確認
+  expect(
+    screen.getByRole("columnheader", {
+      name: days[0]
+    })
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("columnheader", {
+      name: days[3]
+    })
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("columnheader", {
+      name: days[6]
+    })
+  ).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole("button", { name: nextButtonName }));
+  expect(screen.getByRole("button", { name: prevButtonName })).toBeEnabled();
+  expect(screen.getByRole("button", { name: nextButtonName })).toBeEnabled();
+
+  expect(
+    screen.queryByRole("columnheader", {
+      name: days[0]
+    })
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("columnheader", {
+      name: days[3]
+    })
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("columnheader", {
+      name: days[6]
+    })
+  ).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole("button", { name: nextButtonName }));
+  expect(screen.getByRole("button", { name: prevButtonName })).toBeEnabled();
+  expect(screen.getByRole("button", { name: nextButtonName })).toBeDisabled();
+
+  expect(
+    screen.queryByRole("columnheader", {
+      name: days[0]
+    })
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("columnheader", {
+      name: days[3]
+    })
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("columnheader", {
+      name: days[6]
+    })
+  ).toBeInTheDocument();
+
+  await user.click(screen.getByRole("button", { name: prevButtonName }));
+  expect(screen.getByRole("button", { name: prevButtonName })).toBeEnabled();
+  expect(screen.getByRole("button", { name: nextButtonName })).toBeEnabled();
+
+  expect(
+    screen.queryByRole("columnheader", {
+      name: days[0]
+    })
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("columnheader", {
+      name: days[3]
+    })
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("columnheader", {
+      name: days[6]
+    })
+  ).not.toBeInTheDocument();
 });

@@ -1,4 +1,4 @@
-import type { CurrentResponse } from "../api/api.types";
+import type { CurrentResponse, ForecastResponse } from "../api/api.types";
 
 export const mockCurrentWeather: CurrentResponse = {
   location: {
@@ -37,5 +37,77 @@ export const mockCurrentWeather: CurrentResponse = {
     uv: 3,
     gust_mph: 15,
     gust_kph: 24.1
+  }
+};
+
+export const mockForecastWeather: ForecastResponse = {
+  current: {
+    last_updated: "2024-01-27 10:00",
+    last_updated_epoch: 1700000000,
+    temp_c: 23.5,
+    temp_f: 74.3,
+    feelslike_c: 24.0,
+    feelslike_f: 75.2,
+    condition: {
+      text: "Sunny",
+      icon: "https://example.com/sunny.png",
+      code: 1000
+    },
+    wind_mph: 5.6,
+    wind_kph: 9.0,
+    wind_degree: 135,
+    wind_dir: "SE",
+    pressure_mb: 1010,
+    pressure_in: 29.83,
+    precip_mm: 0.0,
+    precip_in: 0.0,
+    humidity: 65,
+    cloud: 0,
+    is_day: 1,
+    uv: 5,
+    gust_mph: 7.2,
+    gust_kph: 11.6
+  },
+  location: {
+    lat: 35.6895,
+    lon: 139.6917,
+    name: "Tokyo",
+    region: "Tokyo",
+    country: "Japan",
+    tz_id: "Asia/Tokyo",
+    localtime_epoch: 1700000000,
+    localtime: "2024-01-27 19:00"
+  },
+  forecast: {
+    forecastday: Array.from({ length: 9 }, (_, i) => ({
+      date: `2024-01-${21 + i}`,
+      date_epoch: 1700000000 + 86400 * i,
+      day: {
+        maxtemp_c: 25,
+        maxtemp_f: 77,
+        mintemp_c: 15,
+        mintemp_f: 59,
+        avgtemp_c: 20,
+        avgtemp_f: 68,
+        maxwind_mph: 10,
+        maxwind_kph: 16,
+        totalprecip_mm: 0.5 * i,
+        totalprecip_in: 0.02 * i,
+        totalsnow_cm: 0,
+        avgvis_km: 10,
+        avgvis_miles: 6,
+        avghumidity: 70,
+        daily_will_it_rain: i % 2,
+        daily_chance_of_rain: 10 * i,
+        daily_will_it_snow: 0,
+        daily_chance_of_snow: 0,
+        condition: {
+          text: "Partly cloudy",
+          icon: "https://example.com/partly_cloudy.png",
+          code: 1003
+        },
+        uv: 5
+      }
+    }))
   }
 };
