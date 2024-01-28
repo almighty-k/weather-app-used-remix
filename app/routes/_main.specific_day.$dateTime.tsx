@@ -138,13 +138,16 @@ function NonWeatherByDateCardContents({
   );
 }
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { dateTime } = params;
   if (!dateTime) throw Error(ERROR_MESSAGES.invalidParam);
 
+  const location = new URL(request.url).searchParams.get("location");
+  if (!location) return defer({ weatherByDatePromise: null });
+
   const [date] = dateTime.split(" ");
   const weatherByDatePromise = fetchWeatherByDate({
-    location: "Tokyo",
+    location,
     date
   });
 
