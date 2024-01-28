@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { BrowserRouter as Router } from "react-router-dom";
 import "@testing-library/jest-dom/vitest";
 import { expect, test, afterEach, describe } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
@@ -20,7 +21,12 @@ afterEach(() => {
 
 describe("現在天気(CurrentWeatherCardコンポーネント)に関するテスト", () => {
   test("現在天気の取得値表示が適切である", () => {
-    render(<CurrentWeatherCard currentWeather={mockCurrentWeather} />);
+    render(
+      // useSearchParamsを使用しているため、Routerで囲む
+      <Router>
+        <CurrentWeatherCard currentWeather={mockCurrentWeather} />
+      </Router>
+    );
 
     expect(screen.getByText("Now:")).toBeInTheDocument();
     expect(screen.getByText("2024-01-27 15:03")).toBeInTheDocument();
@@ -58,7 +64,9 @@ describe("現在天気(CurrentWeatherCardコンポーネント)に関するテ�
 
   test("存在しない場所を入力した際、現在の天気情報を表示する代わりに、「Non-existent location.」が表示される", () => {
     render(
-      <CurrentWeatherCard currentWeather={mockNonExistentLocationError} />
+      <Router>
+        <CurrentWeatherCard currentWeather={mockNonExistentLocationError} />
+      </Router>
     );
 
     // 情報がある場合に表示される要素の確認として、Now:が存在しないことを確認（他の要素は省略）
@@ -67,7 +75,11 @@ describe("現在天気(CurrentWeatherCardコンポーネント)に関するテ�
   });
 
   test("場所の入力がない場合、現在の天気情報を表示する代わりに、「Enter location for search.」が表示される", () => {
-    render(<CurrentWeatherCard currentWeather={null} />);
+    render(
+      <Router>
+        <CurrentWeatherCard currentWeather={null} />
+      </Router>
+    );
 
     expect(screen.queryByText("Now:")).not.toBeInTheDocument();
     expect(screen.getByText("Enter location for search.")).toBeInTheDocument();
@@ -92,7 +104,11 @@ describe("予報天気(ForecastWeatherTableコンポーネント)に関するテ
   ];
 
   test("予報天気の取得値表示が適切で、stepボタン選択の際の表示切り替えが適切である", async () => {
-    render(<ForecastWeatherTable forecastWeather={mockForecastWeather} />);
+    render(
+      <Router>
+        <ForecastWeatherTable forecastWeather={mockForecastWeather} />
+      </Router>
+    );
 
     expect(screen.getByRole("button", { name: prevButtonName })).toBeDisabled();
     expect(screen.getByRole("button", { name: nextButtonName })).toBeEnabled();
@@ -177,7 +193,9 @@ describe("予報天気(ForecastWeatherTableコンポーネント)に関するテ
 
   test("存在しない場所を入力した際、予報天気切り替えの「Before 3 days」「After 3 days」は操作できない", () => {
     render(
-      <ForecastWeatherTable forecastWeather={mockNonExistentLocationError} />
+      <Router>
+        <ForecastWeatherTable forecastWeather={mockNonExistentLocationError} />
+      </Router>
     );
 
     expect(screen.getByRole("button", { name: prevButtonName })).toBeDisabled();
@@ -185,7 +203,11 @@ describe("予報天気(ForecastWeatherTableコンポーネント)に関するテ
   });
 
   test("場所の入力がない場合、予報天気切り替えの「Before 3 days」「After 3 days」は操作できない", () => {
-    render(<ForecastWeatherTable forecastWeather={null} />);
+    render(
+      <Router>
+        <ForecastWeatherTable forecastWeather={null} />
+      </Router>
+    );
 
     expect(screen.getByRole("button", { name: prevButtonName })).toBeDisabled();
     expect(screen.getByRole("button", { name: nextButtonName })).toBeDisabled();
