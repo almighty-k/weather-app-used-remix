@@ -1,11 +1,11 @@
 import { API_ENDPOINT } from "../config.server";
-import type { CurrentResponse, ForecastResponse } from "./api.types";
+import type { APIError, CurrentResponse, ForecastResponse } from "./api.types";
 
 export async function fetchCurrentWeather({
   location
 }: {
   location: string;
-}): Promise<CurrentResponse> {
+}): Promise<CurrentResponse | APIError> {
   const res = await fetch(
     `${API_ENDPOINT}/current.json?key=${process.env.WHETHER_API_KEY}&q=${location}`
   );
@@ -18,7 +18,7 @@ export async function fetchForecastWeather({
 }: {
   location: string;
   days?: number;
-}): Promise<ForecastResponse> {
+}): Promise<ForecastResponse | APIError> {
   const res = await fetch(
     `${API_ENDPOINT}/forecast.json?key=${process.env.WHETHER_API_KEY}&q=${location}&days=${days}`
   );

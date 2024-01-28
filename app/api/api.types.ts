@@ -83,3 +83,10 @@ export interface ForecastResponse {
   location: Location;
   forecast: Forecast;
 }
+
+export interface APIError {
+  error: {
+    code: number;
+    message: string;
+  };
+}
