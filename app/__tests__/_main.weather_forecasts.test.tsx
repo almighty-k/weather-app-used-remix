@@ -37,14 +37,11 @@ describe("現在天気(CurrentWeatherCardコンポーネント)に関するテ�
     expect(screen.getByText("Temperature:")).toBeInTheDocument();
     expect(screen.getByText("12°C")).toBeInTheDocument();
 
-    expect(screen.getByText("Humidity:")).toBeInTheDocument();
-    expect(screen.getByText("22%")).toBeInTheDocument();
-
     expect(screen.getByText("Feels Like:")).toBeInTheDocument();
     expect(screen.getByText("11.7°C")).toBeInTheDocument();
 
-    expect(screen.getByText("Chance of Precipitation:")).toBeInTheDocument();
-    expect(screen.getByText("0%")).toBeInTheDocument();
+    expect(screen.getByText("Humidity:")).toBeInTheDocument();
+    expect(screen.getByText("22%")).toBeInTheDocument();
 
     expect(screen.getByText("Precipitation:")).toBeInTheDocument();
     expect(screen.getByText("0mm")).toBeInTheDocument();

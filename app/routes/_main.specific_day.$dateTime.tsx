@@ -139,8 +139,8 @@ export function WeatherByDateCard({
                   </p>
                   <p>
                     <InfoRow
-                      label="Chance of Precipitation"
-                      value={`${forecast.precip_in}%`}
+                      label="Chance of Rain"
+                      value={`${forecast.chance_of_rain}%`}
                     />
                   </p>
                 </div>

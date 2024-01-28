@@ -125,19 +125,13 @@ export function CurrentWeatherCard({
                   <InfoRow label="Temperature" value={`${current.temp_c}°C`} />
                 </li>
                 <li>
-                  <InfoRow label="Humidity" value={`${current.humidity}%`} />
-                </li>
-                <li>
                   <InfoRow
                     label="Feels Like"
                     value={`${current.feelslike_c}°C`}
                   />
                 </li>
                 <li>
-                  <InfoRow
-                    label="Chance of Precipitation"
-                    value={`${current.precip_in}%`}
-                  />
+                  <InfoRow label="Humidity" value={`${current.humidity}%`} />
                 </li>
                 <li>
                   <InfoRow

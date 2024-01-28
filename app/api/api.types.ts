@@ -30,7 +30,7 @@ interface Current {
   pressure_mb: number; // 気圧（ミリバール）
   pressure_in: number; // 気圧（インチ）
   precip_mm: number; // 降水量（ミリメートル）
-  precip_in: number; // 降水確率
+  precip_in: number; // 降水量（インチ）
   humidity: number; // 湿度
   cloud: number; // 雲量
   is_day: number; // 昼間かどうか
