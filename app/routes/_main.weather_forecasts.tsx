@@ -60,14 +60,14 @@ interface CurrentWeatherCardProps {
 export function CurrentWeatherCard({
   currentWeather
 }: CurrentWeatherCardProps) {
+  if (!currentWeather)
+    return (
+      <NonCurrentWeatherCardContents message="Enter location for search." />
+    );
+
   if ("error" in currentWeather) {
     if (currentWeather.error.code === 1006) {
-      return (
-        <div className={classes.currentWeatherCard}>
-          <CardLabel label="Current Weather" />
-          <GuidanceMessage value="Non-existent location." />
-        </div>
-      );
+      return <NonCurrentWeatherCardContents message="Non-existent location." />;
     }
     throw Error(ERROR_MESSAGES.unexpected);
   }
@@ -129,6 +129,21 @@ export function CurrentWeatherCard({
   );
 }
 
+interface NonCurrentWeatherCardContentsProps {
+  message: string;
+}
+
+function NonCurrentWeatherCardContents({
+  message
+}: NonCurrentWeatherCardContentsProps) {
+  return (
+    <div className={classes.currentWeatherCard}>
+      <CardLabel label="Current Weather" />
+      <GuidanceMessage value={message} />
+    </div>
+  );
+}
+
 interface UvInfoProps {
   uv: CurrentResponse["current"]["uv"];
 }
@@ -157,32 +172,12 @@ export function ForecastWeatherTable({
 }: ForecastWeatherTableProps) {
   const [step, dispatchStep] = useReducer(stepReducer, "first");
 
+  if (!forecastWeather) {
+    return <NonForecastWeatherTable />;
+  }
   if ("error" in forecastWeather) {
     if (forecastWeather.error.code === 1006) {
-      return (
-        <div>
-          <StepButton label="Before 3 days" disabled />
-          <StepButton label="Next 3 days" disabled />
-
-          <table className={classes.forecastWeatherTable}>
-            <thead>
-              <tr>
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <th key={index} />
-                ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr>
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <td key={index} />
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      );
+      return <NonForecastWeatherTable />;
     }
     throw Error(ERROR_MESSAGES.unexpected);
   }
@@ -237,6 +232,37 @@ export function ForecastWeatherTable({
   );
 }
 
+// コンポーネントと関数を見分けるため、空のpropsを定義
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface NonForecastWeatherTableProps {}
+
+function NonForecastWeatherTable() {
+  return (
+    <div>
+      <StepButton label="Before 3 days" disabled />
+      <StepButton label="Next 3 days" disabled />
+
+      <table className={classes.forecastWeatherTable}>
+        <thead>
+          <tr>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <th key={index} />
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <td key={index} />
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 type Step = "first" | "middle" | "last";
 
 function stepReducer(state: Step, action: { type: "prev" | "next" }) {
@@ -281,8 +307,9 @@ function getFilteredForecastByStep({
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  // TODO:検索条件未指定の場合を考慮する。一旦は東京をデフォルトとする
-  const location = new URL(request.url).searchParams.get("location") || "Tokyo";
+  const location = new URL(request.url).searchParams.get("location");
+  if (!location)
+    return defer({ currentWeatherPromise: null, forecastWeatherPromise: null });
 
   const currentWeatherPromise = fetchCurrentWeather({ location });
   const forecastWeatherPromise = fetchForecastWeather({
