@@ -56,7 +56,7 @@ describe("現在天気(CurrentWeatherCardコンポーネント)に関するテ�
     expect(screen.getByText("Moderate")).toBeInTheDocument();
   });
 
-  test("存在しない場所を入力した際、現在の元気情報を表示する代わりに、「Non-existent location.」が表示される", () => {
+  test("存在しない場所を入力した際、現在の天気情報を表示する代わりに、「Non-existent location.」が表示される", () => {
     render(
       <CurrentWeatherCard currentWeather={mockNonExistentLocationError} />
     );
@@ -64,6 +64,13 @@ describe("現在天気(CurrentWeatherCardコンポーネント)に関するテ�
     // 情報がある場合に表示される要素の確認として、Now:が存在しないことを確認（他の要素は省略）
     expect(screen.queryByText("Now:")).not.toBeInTheDocument();
     expect(screen.getByText("Non-existent location.")).toBeInTheDocument();
+  });
+
+  test("場所の入力がない場合、現在の天気情報を表示する代わりに、「Enter location for search.」が表示される", () => {
+    render(<CurrentWeatherCard currentWeather={null} />);
+
+    expect(screen.queryByText("Now:")).not.toBeInTheDocument();
+    expect(screen.getByText("Enter location for search.")).toBeInTheDocument();
   });
 });
 
@@ -172,6 +179,13 @@ describe("予報天気(ForecastWeatherTableコンポーネント)に関するテ
     render(
       <ForecastWeatherTable forecastWeather={mockNonExistentLocationError} />
     );
+
+    expect(screen.getByRole("button", { name: prevButtonName })).toBeDisabled();
+    expect(screen.getByRole("button", { name: nextButtonName })).toBeDisabled();
+  });
+
+  test("場所の入力がない場合、予報天気切り替えの「Before 3 days」「After 3 days」は操作できない", () => {
+    render(<ForecastWeatherTable forecastWeather={null} />);
 
     expect(screen.getByRole("button", { name: prevButtonName })).toBeDisabled();
     expect(screen.getByRole("button", { name: nextButtonName })).toBeDisabled();
