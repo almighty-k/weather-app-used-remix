@@ -15,7 +15,7 @@ export function SearchInput({ label, ...props }: InputProps) {
     <Form
       className={classes.wrapper}
       onChange={(e) => {
-        submit(e.currentTarget, { replace: true });
+        submit(e.currentTarget, { replace: true, preventScrollReset: true });
       }}
     >
       <label htmlFor={props.id}>{label}</label>
