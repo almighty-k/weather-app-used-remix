@@ -169,10 +169,6 @@ export function CurrentWeatherCard({
   );
 }
 
-interface NonCurrentWeatherCardContentsProps {
-  message: string;
-}
-
 interface UvInfoProps {
   uv: CurrentResponse["current"]["uv"];
 }
@@ -188,6 +184,10 @@ function UvInfo({ uv }: UvInfoProps) {
     return <span>High</span>;
   }
   return <span>Very High</span>;
+}
+
+interface NonCurrentWeatherCardContentsProps {
+  message: string;
 }
 
 function NonCurrentWeatherCardContents({
