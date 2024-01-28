@@ -366,13 +366,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
       currentWeatherPromise: Promise.resolve({
         error: {
           code: 1006,
-          message: `${ERROR_MESSAGES.validationError}: location" length must be less than 30.`
+          message: ERROR_MESSAGES.locationNotFound
         }
       }),
       forecastWeatherPromise: Promise.resolve({
         error: {
           code: 1006,
-          message: `${ERROR_MESSAGES.validationError}: location" length must be less than 30.`
+          message: ERROR_MESSAGES.locationNotFound
         }
       }),
       validationError: "Please enter within 30 characters."
