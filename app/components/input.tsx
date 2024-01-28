@@ -19,8 +19,9 @@ export function SearchInput({ label, error, ...props }: InputProps) {
         submit(e.currentTarget, { replace: true, preventScrollReset: true });
       }}
     >
-      <label htmlFor={props.id}>{label}</label>
+      <label htmlFor={label}>{label}</label>
       <input
+        id={label}
         name={props.name}
         placeholder="Input Example: tokyo or 35.6894,139.6917"
         defaultValue={searchParams.get("location") || ""}
