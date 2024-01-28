@@ -62,11 +62,53 @@ interface Day {
   uv: number;
 }
 
+interface Hour {
+  time_epoch: number;
+  time: string;
+  temp_c: number;
+  temp_f: number;
+  condition: Condition;
+  wind_mph: number;
+  wind_kph: number;
+  wind_degree: number;
+  wind_dir: string;
+  pressure_mb: number;
+  pressure_in: number;
+  precip_mm: number;
+  precip_in: number;
+  snow_cm: number;
+  humidity: number;
+  cloud: number;
+  feelslike_c: number;
+  feelslike_f: number;
+  windchill_c: number;
+  windchill_f: number;
+  heatindex_c: number;
+  heatindex_f: number;
+  dewpoint_c: number;
+  dewpoint_f: number;
+  will_it_rain: number;
+  will_it_snow: number;
+  is_day: number;
+  vis_km: number;
+  vis_miles: number;
+  chance_of_rain: number;
+  chance_of_snow: number;
+  gust_mph: number;
+  gust_kph: number;
+  uv: number;
+  short_rad: number;
+  diff_rad: number;
+  // air_qualityについては、今回は使用しないため、型定義を省略
+  // air_quality: AirQuality;
+}
+
 interface ForecastDay {
   date: string;
   date_epoch: number;
   day: Day;
-  // astro, hourについては使用せず、また膨大な型定義が必要なため、今回は省略
+  hour: Hour[];
+  // astro使用せず、また膨大な型定義が必要なため、今回は省略
 }
 
 interface Forecast {
