@@ -10,6 +10,10 @@ import { CardLabel } from "../components/label";
 import { InfoRow } from "../components/info-row";
 import { fetchCurrentWeather, fetchForecastWeather } from "../api/api.server";
 import { getMonthAndDate } from "../utils";
+import type { CurrentResponse, ForecastResponse } from "../api/api.types";
+import { ERROR_MESSAGES } from "../messages";
+import { StepButton } from "../components/button";
+import { GuidanceMessage } from "../components/message";
 
 export default function WeatherForecasts() {
   const { currentWeatherPromise, forecastWeatherPromise } =
@@ -56,6 +60,17 @@ interface CurrentWeatherCardProps {
 export function CurrentWeatherCard({
   currentWeather
 }: CurrentWeatherCardProps) {
+  if ("error" in currentWeather) {
+    if (currentWeather.error.code === 1006) {
+      return (
+        <div className={classes.currentWeatherCard}>
+          <CardLabel label="Current Weather" />
+          <GuidanceMessage value="Non-existent location." />
+        </div>
+      );
+    }
+    throw Error(ERROR_MESSAGES.unexpected);
+  }
   const { location, current } = currentWeather;
 
   return (
@@ -115,9 +130,7 @@ export function CurrentWeatherCard({
 }
 
 interface UvInfoProps {
-  uv: Awaited<
-    SerializeFrom<typeof loader>["currentWeatherPromise"]
-  >["current"]["uv"];
+  uv: CurrentResponse["current"]["uv"];
 }
 
 function UvInfo({ uv }: UvInfoProps) {
@@ -144,6 +157,36 @@ export function ForecastWeatherTable({
 }: ForecastWeatherTableProps) {
   const [step, dispatchStep] = useReducer(stepReducer, "first");
 
+  if ("error" in forecastWeather) {
+    if (forecastWeather.error.code === 1006) {
+      return (
+        <div>
+          <StepButton label="Before 3 days" disabled />
+          <StepButton label="Next 3 days" disabled />
+
+          <table className={classes.forecastWeatherTable}>
+            <thead>
+              <tr>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <th key={index} />
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <td key={index} />
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+    throw Error(ERROR_MESSAGES.unexpected);
+  }
+
   const { forecast } = forecastWeather;
   const filteredForecast = getFilteredForecastByStep({
     forecastDay: forecast.forecastday,
@@ -152,25 +195,20 @@ export function ForecastWeatherTable({
 
   return (
     <div>
-      <button
-        className={classes.forecastWeathersStepButton}
+      <StepButton
+        label="Before 3 days"
         disabled={step === "first"}
         onClick={() => {
           dispatchStep({ type: "prev" });
         }}
-      >
-        Before 3 days
-      </button>
-
-      <button
-        className={classes.forecastWeathersStepButton}
+      />
+      <StepButton
+        label="Next 3 days"
         disabled={step === "last"}
         onClick={() => {
           dispatchStep({ type: "next" });
         }}
-      >
-        Next 3 days
-      </button>
+      />
 
       <table className={classes.forecastWeatherTable}>
         <thead>
@@ -230,9 +268,7 @@ function getFilteredForecastByStep({
   forecastDay,
   step
 }: {
-  forecastDay: Awaited<
-    SerializeFrom<typeof loader>["forecastWeatherPromise"]
-  >["forecast"]["forecastday"];
+  forecastDay: ForecastResponse["forecast"]["forecastday"];
   step: Step;
 }) {
   if (step === "first") {
