@@ -24,3 +24,16 @@ export async function fetchForecastWeather({
   );
   return await res.json();
 }
+
+export async function fetchWeatherByDate({
+  location,
+  date
+}: {
+  location: string;
+  date: string;
+}): Promise<ForecastResponse | APIError> {
+  const res = await fetch(
+    `${API_ENDPOINT}/forecast.json?key=${process.env.WHETHER_API_KEY}&q=${location}&dt=${date}`
+  );
+  return await res.json();
+}
