@@ -1,7 +1,14 @@
 import classes from "../routes-styles/_main.specific_day.$dateTime.module.css";
 
 import { Suspense } from "react";
-import { Await, defer, useLoaderData, useParams } from "@remix-run/react";
+import {
+  Await,
+  NavLink,
+  defer,
+  useLoaderData,
+  useParams,
+  useSearchParams
+} from "@remix-run/react";
 import { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix";
 
 import { ERROR_MESSAGES } from "../messages";
@@ -13,17 +20,29 @@ import { WeatherCard } from "../components/card";
 import { GuidanceMessage } from "../components/message";
 import { InfoRow } from "../components/info-row";
 import { Separator } from "../components/separator";
+import { BackIcon } from "../components/icon";
 
 export default function SpecificDay() {
   const { dateTime } = useParams();
   if (!dateTime) throw Error(ERROR_MESSAGES.invalidParam);
 
   const { weatherByDatePromise } = useLoaderData<typeof loader>();
+  const [searchParams] = useSearchParams();
 
   const formattedDay = getMonthAndDate(dateTime);
   return (
     <div>
-      <Title title={formattedDay} />
+      <div className={classes.titleContainer}>
+        <NavLink
+          to={`/weather_forecasts?location=${searchParams.get("location") || ""}`}
+          prefetch="intent"
+          className={classes.backIcon}
+        >
+          <BackIcon />
+        </NavLink>
+        <Title title={formattedDay} />
+        <div />
+      </div>
 
       <div className={classes.searchInputContainer}>
         <SearchInput label="Location Input" name="location" />

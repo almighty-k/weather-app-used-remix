@@ -1,3 +1,12 @@
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.backIcon {
+  opacity: 0.7;
+}
+
 .searchInputContainer {
   padding: 1.5rem;
 }
