@@ -26,15 +26,14 @@ export default function SpecificDay() {
   const { dateTime } = useParams();
   if (!dateTime) throw Error(ERROR_MESSAGES.invalidParam);
 
-  const { weatherByDatePromise } = useLoaderData<typeof loader>();
-  const [searchParams] = useSearchParams();
+  const { weatherByDatePromise, validationError } =
+    useLoaderData<typeof loader>();
 
+  const [searchParams] = useSearchParams();
   const location = searchParams.get("location") || "";
-  // 30文字以上の場合はバリデーションエラーを表示
-  const validationError =
-    location.length > 30 ? "Please enter within 30 characters." : "";
 
   const formattedDay = getMonthAndDate(dateTime);
+
   return (
     <div>
       <div className={classes.titleContainer}>
@@ -172,21 +171,32 @@ function NonWeatherByDateCard({
   );
 }
 
+interface LoaderData {
+  weatherByDatePromise: ReturnType<typeof fetchWeatherByDate> | null;
+  validationError: string;
+}
+
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { dateTime } = params;
   if (!dateTime) throw Error(ERROR_MESSAGES.invalidParam);
 
   const location = new URL(request.url).searchParams.get("location");
-  if (!location) return defer({ weatherByDatePromise: null });
+  if (!location)
+    return defer({
+      weatherByDatePromise: null,
+      validationError: ""
+    } satisfies LoaderData);
+
   if (location.length > 30)
     return defer({
-      weatherByDatePromise: {
+      weatherByDatePromise: Promise.resolve({
         error: {
           code: 1006,
           message: `${ERROR_MESSAGES.validationError}: location" length must be less than 30.`
         }
-      }
-    });
+      }),
+      validationError: "Please enter within 30 characters."
+    } satisfies LoaderData);
 
   const [date] = dateTime.split(" ");
   const weatherByDatePromise = fetchWeatherByDate({
@@ -194,5 +204,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     date
   });
 
-  return defer({ weatherByDatePromise });
+  return defer({
+    weatherByDatePromise,
+    validationError: ""
+  } satisfies LoaderData);
 }

@@ -21,14 +21,8 @@ import { GuidanceMessage } from "../components/message";
 import { WeatherCard } from "../components/card";
 
 export default function WeatherForecasts() {
-  const { currentWeatherPromise, forecastWeatherPromise } =
+  const { currentWeatherPromise, forecastWeatherPromise, validationError } =
     useLoaderData<typeof loader>();
-
-  const [searchParams] = useSearchParams();
-  const location = searchParams.get("location") || "";
-  // 30文字以上の場合はバリデーションエラーを表示
-  const validationError =
-    location.length > 30 ? "Please enter within 30 characters." : "";
 
   return (
     <div>
@@ -352,25 +346,37 @@ function NonForecastWeatherTable() {
   );
 }
 
+interface LoaderData {
+  currentWeatherPromise: ReturnType<typeof fetchCurrentWeather> | null;
+  forecastWeatherPromise: ReturnType<typeof fetchForecastWeather> | null;
+  validationError: string;
+}
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const location = new URL(request.url).searchParams.get("location");
   if (!location)
-    return defer({ currentWeatherPromise: null, forecastWeatherPromise: null });
+    return defer({
+      currentWeatherPromise: null,
+      forecastWeatherPromise: null,
+      validationError: ""
+    } satisfies LoaderData);
+
   if (location.length > 30)
     return defer({
-      currentWeatherPromise: {
+      currentWeatherPromise: Promise.resolve({
         error: {
           code: 1006,
           message: `${ERROR_MESSAGES.validationError}: location" length must be less than 30.`
         }
-      },
-      forecastWeatherPromise: {
+      }),
+      forecastWeatherPromise: Promise.resolve({
         error: {
           code: 1006,
           message: `${ERROR_MESSAGES.validationError}: location" length must be less than 30.`
         }
-      }
-    });
+      }),
+      validationError: "Please enter within 30 characters."
+    } satisfies LoaderData);
 
   const currentWeatherPromise = fetchCurrentWeather({ location });
   const forecastWeatherPromise = fetchForecastWeather({
@@ -379,6 +385,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return defer({
     currentWeatherPromise,
-    forecastWeatherPromise
-  });
+    forecastWeatherPromise,
+    validationError: ""
+  } satisfies LoaderData);
 }
