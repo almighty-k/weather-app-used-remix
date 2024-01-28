@@ -13,3 +13,20 @@
   outline: none;
   border-color: var(--color-purple-3);
 }
+
+.inputError {
+  padding: 1rem;
+  border: 1px solid var(--color-red-1);
+  border-radius: 0.5rem;
+}
+
+.inputError:focus {
+  outline: none;
+  border-color: var(--color-red-1);
+}
+
+.inputErrorMessage {
+  color: var(--color-red-1);
+  font-size: 0.75rem;
+  margin: 2px;
+}

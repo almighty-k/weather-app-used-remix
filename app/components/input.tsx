@@ -5,9 +5,10 @@ import { Form, useSearchParams, useSubmit } from "@remix-run/react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  error?: string;
 }
 
-export function SearchInput({ label, ...props }: InputProps) {
+export function SearchInput({ label, error, ...props }: InputProps) {
   const submit = useSubmit();
   const [searchParams] = useSearchParams();
 
@@ -24,8 +25,9 @@ export function SearchInput({ label, ...props }: InputProps) {
         placeholder="Input Example: tokyo or 35.6894,139.6917"
         defaultValue={searchParams.get("location") || ""}
         {...props}
-        className={classes.input}
+        className={error ? classes.inputError : classes.input}
       />
+      {error && <p className={classes.inputErrorMessage}>{error}</p>}
     </Form>
   );
 }
