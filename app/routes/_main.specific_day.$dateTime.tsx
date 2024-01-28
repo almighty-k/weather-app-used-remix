@@ -58,8 +58,14 @@ export default function SpecificDay() {
       </div>
 
       <div className={classes.weatherByDateCardContainer}>
-        {/* TODO: ローディングスケルトンの実装 */}
-        <Suspense fallback={<p>loading...</p>}>
+        <Suspense
+          fallback={
+            <NonWeatherByDateCard
+              cardLabel={formattedDay}
+              message="loading..."
+            />
+          }
+        >
           <Await resolve={weatherByDatePromise}>
             {(resolvedValue) => (
               <WeatherByDateCard
@@ -86,7 +92,7 @@ export function WeatherByDateCard({
   const labelMessage = `Weather at ${day}`;
   if (!weatherByDate) {
     return (
-      <NonWeatherByDateCardContents
+      <NonWeatherByDateCard
         cardLabel={labelMessage}
         message="Enter location for search."
       />
@@ -95,7 +101,7 @@ export function WeatherByDateCard({
   if ("error" in weatherByDate) {
     if (weatherByDate.error.code === 1006) {
       return (
-        <NonWeatherByDateCardContents
+        <NonWeatherByDateCard
           cardLabel={labelMessage}
           message="Non-existent location."
         />
@@ -149,15 +155,15 @@ export function WeatherByDateCard({
   );
 }
 
-interface NonWeatherByDateCardContentsProps {
+interface NonWeatherByDateCardProps {
   cardLabel: string;
   message: string;
 }
 
-function NonWeatherByDateCardContents({
+function NonWeatherByDateCard({
   cardLabel,
   message
-}: NonWeatherByDateCardContentsProps) {
+}: NonWeatherByDateCardProps) {
   return (
     <WeatherCard
       cardLabel={cardLabel}

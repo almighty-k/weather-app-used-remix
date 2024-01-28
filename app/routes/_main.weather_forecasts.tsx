@@ -43,8 +43,9 @@ export default function WeatherForecasts() {
       </div>
 
       <div className={classes.currentWeatherCardContainer}>
-        {/* TODO: ローディングスケルトンの実装 */}
-        <Suspense fallback={<p>loading...</p>}>
+        <Suspense
+          fallback={<NonCurrentWeatherCardContents message="loading..." />}
+        >
           <Await resolve={currentWeatherPromise}>
             {(resolvedValue) => (
               <CurrentWeatherCard currentWeather={resolvedValue} />
@@ -54,8 +55,7 @@ export default function WeatherForecasts() {
       </div>
 
       <div className={classes.forecastWeatherTableContainer}>
-        {/* TODO: ローディングスケルトンの実装 */}
-        <Suspense fallback={<p>loading...</p>}>
+        <Suspense fallback={<NonForecastWeatherTable />}>
           <Await resolve={forecastWeatherPromise}>
             {(resolvedValue) => (
               <ForecastWeatherTable forecastWeather={resolvedValue} />
