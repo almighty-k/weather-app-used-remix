@@ -23,12 +23,23 @@ import { WeatherCard } from "../components/card";
 export default function WeatherForecasts() {
   const { currentWeatherPromise, forecastWeatherPromise } =
     useLoaderData<typeof loader>();
+
+  const [searchParams] = useSearchParams();
+  const location = searchParams.get("location") || "";
+  // 30文字以上の場合はバリデーションエラーを表示
+  const validationError =
+    location.length > 30 ? "Please enter within 30 characters." : "";
+
   return (
     <div>
       <Title title="Weather Forecasts App" />
 
       <div className={classes.searchInputContainer}>
-        <SearchInput label="Location Input" name="location" />
+        <SearchInput
+          label="Location Input"
+          name="location"
+          error={validationError}
+        />
       </div>
 
       <div className={classes.currentWeatherCardContainer}>
@@ -351,6 +362,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const location = new URL(request.url).searchParams.get("location");
   if (!location)
     return defer({ currentWeatherPromise: null, forecastWeatherPromise: null });
+  if (location.length > 30)
+    return defer({
+      currentWeatherPromise: {
+        error: {
+          code: 1006,
+          message: `${ERROR_MESSAGES.validationError}: location" length must be less than 30.`
+        }
+      },
+      forecastWeatherPromise: {
+        error: {
+          code: 1006,
+          message: `${ERROR_MESSAGES.validationError}: location" length must be less than 30.`
+        }
+      }
+    });
 
   const currentWeatherPromise = fetchCurrentWeather({ location });
   const forecastWeatherPromise = fetchForecastWeather({
