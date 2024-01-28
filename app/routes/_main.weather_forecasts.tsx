@@ -1,7 +1,7 @@
 import classes from "../routes-styles/_main.weather_forecasts.module.css";
 
 import { Suspense, useReducer } from "react";
-import { SerializeFrom, defer } from "@vercel/remix";
+import { LoaderFunctionArgs, SerializeFrom, defer } from "@vercel/remix";
 import { Await, useLoaderData } from "@remix-run/react";
 
 import { Title } from "../components/title";
@@ -19,7 +19,7 @@ export default function WeatherForecasts() {
       <Title title="Weather Forecasts App" />
 
       <div className={classes.searchInputContainer}>
-        <SearchInput label="Location Input" />
+        <SearchInput label="Location Input" name="location" />
       </div>
 
       <div className={classes.currentWeatherCardContainer}>
@@ -244,9 +244,10 @@ function getFilteredForecastByStep({
   return [...forecastDay.slice(6)];
 }
 
-export async function loader() {
-  // TODO: 検索クエリから都市名（または緯度、軽度）を取得するよう実装。一旦、固定値で東京を指定
-  const location = "Tokyo";
+export async function loader({ request }: LoaderFunctionArgs) {
+  // TODO:検索条件未指定の場合を考慮する。一旦は東京をデフォルトとする
+  const location = new URL(request.url).searchParams.get("location") || "Tokyo";
+
   const currentWeatherPromise = fetchCurrentWeather({ location });
   const forecastWeatherPromise = fetchForecastWeather({
     location
