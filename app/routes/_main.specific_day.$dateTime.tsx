@@ -50,8 +50,9 @@ export default function SpecificDay() {
 
       <div className={classes.searchInputContainer}>
         <SearchInput
-          label="Location Input"
+          id="location"
           name="location"
+          label="Location Input"
           error={validationError}
         />
       </div>
