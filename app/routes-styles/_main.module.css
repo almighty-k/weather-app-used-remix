@@ -2,6 +2,12 @@
   padding: 1rem 0.5rem;
 }
 
+.credit {
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
 @media screen and (min-width: 640px) {
   .wrapper {
     padding: 2rem 5rem;
