@@ -12,6 +12,13 @@
   padding-top: 1rem;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+  font-size: inherit;
+  font-family: inherit;
+}
+
 p {
   margin: 0;
 }
