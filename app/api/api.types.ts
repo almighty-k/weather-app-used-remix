@@ -39,7 +39,47 @@ interface Current {
   gust_kph: number; // 突風（キロメートル毎時）
 }
 
+interface Day {
+  maxtemp_c: number;
+  maxtemp_f: number;
+  mintemp_c: number;
+  mintemp_f: number;
+  avgtemp_c: number;
+  avgtemp_f: number;
+  maxwind_mph: number;
+  maxwind_kph: number;
+  totalprecip_mm: number;
+  totalprecip_in: number;
+  totalsnow_cm: number;
+  avgvis_km: number;
+  avgvis_miles: number;
+  avghumidity: number;
+  daily_will_it_rain: number;
+  daily_chance_of_rain: number;
+  daily_will_it_snow: number;
+  daily_chance_of_snow: number;
+  condition: Condition;
+  uv: number;
+}
+
+interface ForecastDay {
+  date: string;
+  date_epoch: number;
+  day: Day;
+  // astro, hourについては使用せず、また膨大な型定義が必要なため、今回は省略
+}
+
+interface Forecast {
+  forecastday: ForecastDay[];
+}
+
 export interface CurrentResponse {
   location: Location;
   current: Current;
+}
+
+export interface ForecastResponse {
+  current: Current;
+  location: Location;
+  forecast: Forecast;
 }
