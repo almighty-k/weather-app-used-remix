@@ -14,10 +14,11 @@ import type { LinksFunction, MetaFunction } from "@vercel/remix";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "天気予報検索アプリ" },
+    { title: "Weather Forecasts App" },
     {
       name: "description",
-      content: "検索した場所の1週間の天気を確認できるアプリです。"
+      content:
+        "It is an app that can check the weather forecast for the searched location."
     }
   ];
 };
@@ -30,7 +31,7 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   return (
-    <html lang="ja">
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
