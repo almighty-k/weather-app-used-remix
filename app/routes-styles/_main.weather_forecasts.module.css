@@ -6,13 +6,6 @@
   padding: 1rem 0;
 }
 
-.currentWeatherCard {
-  min-height: 21.5rem;
-  background-color: #fff;
-  border: 1px solid var(--color-gray-1);
-  border-radius: 0.5rem;
-}
-
 .currentWeatherCardLink {
   min-height: 21.5rem;
   background-color: #fff;

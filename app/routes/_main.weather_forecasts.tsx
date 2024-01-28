@@ -11,7 +11,6 @@ import {
 
 import { Title } from "../components/title";
 import { SearchInput } from "../components/input";
-import { CardLabel } from "../components/label";
 import { InfoRow } from "../components/info-row";
 import { fetchCurrentWeather, fetchForecastWeather } from "../api/api.server";
 import { getMonthAndDate } from "../utils";
@@ -19,6 +18,7 @@ import type { CurrentResponse, ForecastResponse } from "../api/api.types";
 import { ERROR_MESSAGES } from "../messages";
 import { StepButton } from "../components/button";
 import { GuidanceMessage } from "../components/message";
+import { WeatherCard } from "../components/card";
 
 export default function WeatherForecasts() {
   const { currentWeatherPromise, forecastWeatherPromise } =
@@ -86,56 +86,79 @@ export function CurrentWeatherCard({
       prefetch="intent"
     >
       <div className={classes.currentWeatherCardLink}>
-        <CardLabel label="Current Weather" />
+        <WeatherCard
+          cardLabel="Current Weather"
+          CardContent={
+            <>
+              <div className={classes.currentWeatherLocation}>
+                <div>
+                  <img
+                    src={current.condition.icon}
+                    alt="current weather icon"
+                  />
+                </div>
+                <div>
+                  <p>
+                    {location.localtime && (
+                      <InfoRow label="Now" value={location.localtime} />
+                    )}
+                  </p>
+                  <p>
+                    <InfoRow label="Location" value={location.name} />
+                  </p>
+                </div>
+              </div>
 
-        <div className={classes.currentWeatherLocation}>
-          <div>
-            <img src={current.condition.icon} alt="current weather icon" />
-          </div>
-          <div>
-            <p>
-              {location.localtime && (
-                <InfoRow label="Now" value={location.localtime} />
-              )}
-            </p>
-            <p>
-              <InfoRow label="Location" value={location.name} />
-            </p>
-          </div>
-        </div>
-
-        <ul className={classes.currentWeatherInfoListWrapper}>
-          <li>
-            <InfoRow label="Temperature" value={`${current.temp_c}°C`} />
-          </li>
-          <li>
-            <InfoRow label="Humidity" value={`${current.humidity}%`} />
-          </li>
-          <li>
-            <InfoRow label="Feels Like" value={`${current.feelslike_c}°C`} />
-          </li>
-          <li>
-            <InfoRow
-              label="Chance of Precipitation"
-              value={`${current.precip_in}%`}
-            />
-          </li>
-          <li>
-            <InfoRow label="Precipitation" value={`${current.precip_mm}mm`} />
-          </li>
-          <li>
-            <InfoRow label="Wind Speed" value={`${current.wind_kph}km/h`} />
-          </li>
-          <li>
-            <InfoRow label="Wind Direction" value={current.wind_dir} />
-          </li>
-          <li>
-            <InfoRow label="Pressure" value={`${current.pressure_in} Inches`} />
-          </li>
-          <li>
-            <InfoRow label="UV Index" value={<UvInfo uv={current.uv} />} />
-          </li>
-        </ul>
+              <ul className={classes.currentWeatherInfoListWrapper}>
+                <li>
+                  <InfoRow label="Temperature" value={`${current.temp_c}°C`} />
+                </li>
+                <li>
+                  <InfoRow label="Humidity" value={`${current.humidity}%`} />
+                </li>
+                <li>
+                  <InfoRow
+                    label="Feels Like"
+                    value={`${current.feelslike_c}°C`}
+                  />
+                </li>
+                <li>
+                  <InfoRow
+                    label="Chance of Precipitation"
+                    value={`${current.precip_in}%`}
+                  />
+                </li>
+                <li>
+                  <InfoRow
+                    label="Precipitation"
+                    value={`${current.precip_mm}mm`}
+                  />
+                </li>
+                <li>
+                  <InfoRow
+                    label="Wind Speed"
+                    value={`${current.wind_kph}km/h`}
+                  />
+                </li>
+                <li>
+                  <InfoRow label="Wind Direction" value={current.wind_dir} />
+                </li>
+                <li>
+                  <InfoRow
+                    label="Pressure"
+                    value={`${current.pressure_in} Inches`}
+                  />
+                </li>
+                <li>
+                  <InfoRow
+                    label="UV Index"
+                    value={<UvInfo uv={current.uv} />}
+                  />
+                </li>
+              </ul>
+            </>
+          }
+        />
       </div>
     </NavLink>
   );
@@ -149,10 +172,10 @@ function NonCurrentWeatherCardContents({
   message
 }: NonCurrentWeatherCardContentsProps) {
   return (
-    <div className={classes.currentWeatherCard}>
-      <CardLabel label="Current Weather" />
-      <GuidanceMessage value={message} />
-    </div>
+    <WeatherCard
+      cardLabel="Current Weather"
+      CardContent={<GuidanceMessage value={message} />}
+    />
   );
 }
 
