@@ -179,17 +179,6 @@ interface NonCurrentWeatherCardContentsProps {
   message: string;
 }
 
-function NonCurrentWeatherCardContents({
-  message
-}: NonCurrentWeatherCardContentsProps) {
-  return (
-    <WeatherCard
-      cardLabel="Current Weather"
-      CardContent={<GuidanceMessage value={message} />}
-    />
-  );
-}
-
 interface UvInfoProps {
   uv: CurrentResponse["current"]["uv"];
 }
@@ -205,6 +194,17 @@ function UvInfo({ uv }: UvInfoProps) {
     return <span>High</span>;
   }
   return <span>Very High</span>;
+}
+
+function NonCurrentWeatherCardContents({
+  message
+}: NonCurrentWeatherCardContentsProps) {
+  return (
+    <WeatherCard
+      cardLabel="Current Weather"
+      CardContent={<GuidanceMessage value={message} />}
+    />
+  );
 }
 
 interface ForecastWeatherTableProps {
@@ -284,37 +284,6 @@ export function ForecastWeatherTable({
   );
 }
 
-// コンポーネントと関数を見分けるため、空のpropsを定義
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface NonForecastWeatherTableProps {}
-
-function NonForecastWeatherTable() {
-  return (
-    <div>
-      <StepButton label="Before 3 days" disabled />
-      <StepButton label="Next 3 days" disabled />
-
-      <table className={classes.forecastWeatherTable}>
-        <thead>
-          <tr>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <th key={index} />
-            ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <td key={index} />
-            ))}
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
 type Step = "first" | "middle" | "last";
 
 function stepReducer(state: Step, action: { type: "prev" | "next" }) {
@@ -356,6 +325,37 @@ function getFilteredForecastByStep({
     return [...forecastDay.slice(3, 6)];
   }
   return [...forecastDay.slice(6)];
+}
+
+// コンポーネントと関数を見分けるため、空のpropsを定義
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface NonForecastWeatherTableProps {}
+
+function NonForecastWeatherTable() {
+  return (
+    <div>
+      <StepButton label="Before 3 days" disabled />
+      <StepButton label="Next 3 days" disabled />
+
+      <table className={classes.forecastWeatherTable}>
+        <thead>
+          <tr>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <th key={index} />
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <td key={index} />
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
