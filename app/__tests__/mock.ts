@@ -1,4 +1,8 @@
-import type { CurrentResponse, ForecastResponse } from "../api/api.types";
+import type {
+  APIError,
+  CurrentResponse,
+  ForecastResponse
+} from "../api/api.types";
 
 export const mockCurrentWeather: CurrentResponse = {
   location: {
@@ -109,5 +113,12 @@ export const mockForecastWeather: ForecastResponse = {
         uv: 5
       }
     }))
+  }
+};
+
+export const mockNonExistentLocationError: APIError = {
+  error: {
+    code: 1006,
+    message: "No matching location found."
   }
 };
