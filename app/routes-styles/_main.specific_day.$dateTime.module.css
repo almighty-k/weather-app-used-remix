@@ -1,0 +1,20 @@
+.searchInputContainer {
+  padding: 1.5rem;
+}
+
+.weatherByDateCardContainer {
+  padding: 1rem 0;
+}
+
+.currentWeatherLocation {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+}
+
+@media screen and (min-width: 640px) {
+  .searchInputContainer {
+    padding: 2.5rem 5rem;
+  }
+}
