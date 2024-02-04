@@ -1,7 +1,8 @@
 import classes from "./input.module.css";
 
 import type { InputHTMLAttributes } from "react";
-import { Form, useSearchParams, useSubmit } from "@remix-run/react";
+import { Form, useSearchParams } from "@remix-run/react";
+import { useDebounceSubmit } from "remix-utils/use-debounce-submit";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -9,14 +10,18 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function SearchInput({ label, error, ...props }: InputProps) {
-  const submit = useSubmit();
+  const submit = useDebounceSubmit();
   const [searchParams] = useSearchParams();
 
   return (
     <Form
       className={classes.wrapper}
       onChange={(e) => {
-        submit(e.currentTarget, { replace: true, preventScrollReset: true });
+        submit(e.currentTarget, {
+          replace: true,
+          preventScrollReset: true,
+          debounceTimeout: 500
+        });
       }}
     >
       <label htmlFor={props.id}>{label}</label>
