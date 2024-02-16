@@ -3,6 +3,7 @@
 - 場所を入力することで、その場所の現在の天気、予報天気が取得できるアプリです。
 - [デプロイ先](https://weather-app-used-remix.vercel.app/weather_forecasts)
 - 作成に要した時間：約12時間15分(仕様確認、ESLint等の開発における設定、テスト実装、READEME記載等を含む)
+- （なお、予報取得箇所については[weatherapi](https://www.weatherapi.com/docs/)のお試し期間が終了し、freeプランに移行したため、現在は3日分のみの取得となります。）
 
 ## ローカル環境での動作確認及びテスト実行
 
